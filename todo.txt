@@ -1,0 +1,9 @@
+- Récupérer coordonnées des pions sur la map et les stocker dans un tableau.
+    (par exemple faire un tableau de la map avec des 1 et des 0)
+    (Si il y a un 1, )
+
+- Mort des animaux par vieillesse , par manque de nouriture et par attaque de Loup (Les Loups ne s'attaquent pas entre eux)
+
+- Faire apparaitre Sel Mineraux quand mort par vieillesse ou de manque de nourriture
+
+- Faire apparaitre herbe
