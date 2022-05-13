@@ -8,7 +8,6 @@ SHELL = /bin/sh
 # définition des commandes utilisées
 CC = g++
 RM = rm -f
-MKDIR = mkdir
 
 # définition des fichiers et dossiers
 PROGNAME = ecosystem
@@ -19,7 +18,7 @@ HEADERS = class.h map.h
 all: $(PROGNAME)
 
 $(PROGNAME): $(SOURCES) $(HEADERS)
-	$(CC) $(SOURCES) $(LDFLAGS) -o $(PROGNAME)
+	$(CC) $(SOURCES) -o $(PROGNAME)
 
 clean:
 	@$(RM) -r $(PROGNAME)
