@@ -46,9 +46,10 @@ void Init() {
   for (int i = 0; i < cbLoup; i++) {
     x = rand() % 7;
     y = rand() % 7;
-    trouverCaseVide(x,y);
+    trouverCaseVide(x, y);
     Loup loup;
-    int sexePionsId = loup.sexeAnimaux() + 3; // sexeAnimaux revoit 0 = mâle; 1 = femelle
+    int sexePionsId =
+        loup.sexeAnimaux() + 3; // sexeAnimaux revoit 0 = mâle; 1 = femelle
     tableauPionsMap[x][y] = sexePionsId;
     loup.deplacement(x, y, 'L', sexePionsId);
     tableauLoup.push_back(loup); // Mettre loup dans le vector tabLoup
@@ -59,16 +60,15 @@ void Init() {
   for (int i = 0; i < cbMouton; i++) {
     x = rand() % 7;
     y = rand() % 7;
-    trouverCaseVide(x,y);
+    trouverCaseVide(x, y);
     Mouton mouton;
-    int sexePionsId = mouton.sexeAnimaux(); // sexeAnimaux revoit 0 = mâle; 1 = femelle
+    int sexePionsId =
+        mouton.sexeAnimaux(); // sexeAnimaux revoit 0 = mâle; 1 = femelle
     tableauPionsMap[x][y] = sexePionsId;
     mouton.deplacement(x, y, 'M', sexePionsId);
-    tableauMouton.push_back(mouton); //Mettre mouton dans le vector tabMouton
+    tableauMouton.push_back(mouton); // Mettre mouton dans le vector tabMouton
   }
 }
-
-
 
 int main(void) {
   srand(time(NULL));

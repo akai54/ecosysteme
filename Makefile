@@ -1,6 +1,4 @@
 #  Makefile 
-#  Auteur : Besher AL ADDAM
-#  Email  : beshoux@outlook.fr
 #  Date   : 13/05/2022
 
 SHELL = /bin/sh
