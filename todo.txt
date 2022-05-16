@@ -7,3 +7,11 @@
 - Faire apparaitre Sel Mineraux quand mort par vieillesse ou de manque de nourriture
 
 - Faire apparaitre herbe
+
+
+- fonction(qui doit chercher, qu'est-ce qu'il cherche){
+    position mise a jour
+    map ?
+
+
+}

@@ -25,8 +25,7 @@ enum ObjetMap {
   Vide
 };
 
-int tableauPionsMap[7]
-                   [7]; // Tableau pour savoir les coordonnées de chaque pions
+int tableauPionsMap[7][7]; // Tableau pour savoir les coordonnées de chaque pions
 
 int tabcaseAutour[8] = {Vide, Vide, Vide, Vide, Vide, Vide, Vide, Vide};
 
@@ -43,6 +42,7 @@ protected:
   int sexe;                  // 0 = mâle; 1 = femelle
   int comptJourSansManger = 0;
   int comptJour = 0;
+  int sexeIdPions = 0;
 
 public:
   Animaux() {
@@ -63,13 +63,12 @@ public:
     cout << comptJour << endl;
   }
 
-  void deplacement(int newX, int newY, char nom, int idPions) {
+  void position(int newX, int newY, char nom) {
     map.position(x, y, ' ');
     tableauPionsMap[x][y] = Vide;
     x = newX;
     y = newY;
     map.position(x, y, nom);
-    tableauPionsMap[x][y] = idPions;
   }
 
   void reproduction();
@@ -131,6 +130,26 @@ public:
       }
     }
   }
+
+
+  void deplacement(int XObjet, int YObjet){
+    int xCbDeDeplacement = 0;
+    int yCbDeDeplacement = 0;
+
+    xCbDeDeplacement = XObjet - x;
+    yCbDeDeplacement = YObjet - y;
+
+
+    if(xCbDeDeplacement > 1) xCbDeDeplacement = 1;
+    else if(xCbDeDeplacement < -1) xCbDeDeplacement = -1;
+
+    if(yCbDeDeplacement > 1) xCbDeDeplacement = 1;
+    else if(yCbDeDeplacement < -1) yCbDeDeplacement = -1;
+
+    position(x+xCbDeDeplacement, y+ yCbDeDeplacement, nom);
+  }
+
+
 };
 
 class Loup : public Animaux {
@@ -205,3 +224,4 @@ inline void trouverCaseVide(int &x, int &y) {
     trouverCaseVide(x, y);
   }
 }
+
