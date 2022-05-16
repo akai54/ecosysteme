@@ -10,7 +10,7 @@ CC = g++
 RM = rm -f
 
 # définition des fichiers et dossiers
-PROGNAME = ecosystem
+PROGNAME = ecosysteme
 VERSION = 1.0
 SOURCES = ecosystem.cpp
 HEADERS = class.h map.h
