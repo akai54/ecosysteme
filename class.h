@@ -22,10 +22,15 @@ enum ObjetMap {
   Loup_BB,
   Sel_Mineraux,
   Herbe,
-  Vide
+  Vide,
+  M,
+  L
 };
 
-int tableauPionsMap[7][7]; // Tableau pour savoir les coordonnées de chaque pions
+int tableauPionsMap[7]
+                   [7]; // Tableau pour savoir les coordonnées de chaque pions
+
+int tableauPionsGenerale[7][7];
 
 int tabcaseAutour[8] = {Vide, Vide, Vide, Vide, Vide, Vide, Vide, Vide};
 
@@ -131,25 +136,27 @@ public:
     }
   }
 
-
-  void deplacement(int XObjet, int YObjet){
+  void deplacement(int XObjet, int YObjet) {
     int xCbDeDeplacement = 0;
     int yCbDeDeplacement = 0;
 
     xCbDeDeplacement = XObjet - x;
     yCbDeDeplacement = YObjet - y;
 
+    if (xCbDeDeplacement > 1)
+      xCbDeDeplacement = 1;
+    else if (xCbDeDeplacement < -1)
+      xCbDeDeplacement = -1;
 
-    if(xCbDeDeplacement > 1) xCbDeDeplacement = 1;
-    else if(xCbDeDeplacement < -1) xCbDeDeplacement = -1;
+    if (yCbDeDeplacement > 1)
+      xCbDeDeplacement = 1;
+    else if (yCbDeDeplacement < -1)
+      yCbDeDeplacement = -1;
 
-    if(yCbDeDeplacement > 1) xCbDeDeplacement = 1;
-    else if(yCbDeDeplacement < -1) yCbDeDeplacement = -1;
-
-    position(x+xCbDeDeplacement, y+ yCbDeDeplacement, nom);
+    position(x + xCbDeDeplacement, y + yCbDeDeplacement, nom);
   }
 
-
+  void plus_proche(void) {}
 };
 
 class Loup : public Animaux {
@@ -224,4 +231,3 @@ inline void trouverCaseVide(int &x, int &y) {
     trouverCaseVide(x, y);
   }
 }
-

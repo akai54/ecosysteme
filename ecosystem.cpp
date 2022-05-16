@@ -40,6 +40,12 @@ void Init() {
     }
   }
 
+  for (int i = 0; i < 7; i++) {
+    for (int j = 0; j < 7; j++) {
+      tableauPionsGenerale[i][j] = Vide;
+    }
+  }
+
   int x, y;
   // Initialisation du nombre de loup dans tableau Loup
   // Le constructeur est appelé automatiquement
@@ -48,8 +54,10 @@ void Init() {
     y = rand() % 7;
     trouverCaseVide(x, y);
     Loup loup;
-    int sexePionsId = loup.sexeAnimaux() + 3; // sexeAnimaux revoit 0 = mâle; 1 = femelle
+    int sexePionsId =
+        loup.sexeAnimaux() + 3; // sexeAnimaux revoit 0 = mâle; 1 = femelle
     tableauPionsMap[x][y] = sexePionsId;
+    tableauPionsGenerale[x][y] = L;
     loup.position(x, y, 'L');
     tableauPionsMap[x][y] = sexePionsId;
     tableauLoup.push_back(loup); // Mettre loup dans le vector tabLoup
@@ -62,8 +70,10 @@ void Init() {
     y = rand() % 7;
     trouverCaseVide(x, y);
     Mouton mouton;
-    int sexePionsId = mouton.sexeAnimaux(); // sexeAnimaux revoit 0 = mâle; 1 = femelle
+    int sexePionsId =
+        mouton.sexeAnimaux(); // sexeAnimaux revoit 0 = mâle; 1 = femelle
     tableauPionsMap[x][y] = sexePionsId;
+    tableauPionsGenerale[x][y] = M;
     mouton.position(x, y, 'M');
     tableauPionsMap[x][y] = sexePionsId;
     tableauMouton.push_back(mouton); // Mettre mouton dans le vector tabMouton
