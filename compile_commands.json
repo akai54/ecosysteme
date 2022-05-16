@@ -1,0 +1,14 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-o",
+      "ecosysteme",
+      "ecosystem.cpp"
+    ],
+    "directory": "/home/beshoux/Bureau/S4/oop/ecosysteme",
+    "file": "/home/beshoux/Bureau/S4/oop/ecosysteme/ecosystem.cpp",
+    "output": "/home/beshoux/Bureau/S4/oop/ecosysteme/ecosysteme"
+  }
+]
