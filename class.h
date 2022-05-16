@@ -199,7 +199,7 @@ void AutourCase(int tabDirection[], int taille){
     tabcaseAutour[compt] = tableauPionsMap[x][y];
     compt++;
   }
-  //afficherTabInt(tabcaseAutour);
+  afficherTabInt(tabcaseAutour);
 }
 
 bool estUneCaseVide(int x, int y){
