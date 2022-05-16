@@ -16,7 +16,7 @@ HEADERS = class.h map.h
 all: $(PROGNAME)
 
 $(PROGNAME): $(SOURCES) $(HEADERS)
-	$(CC) $(SOURCES) -o $(PROGNAME)
+	$(CC) $(SOURCES) -o $(PROGNAME) -Wall -Wextra
 
 clean:
 	@$(RM) -r $(PROGNAME)
