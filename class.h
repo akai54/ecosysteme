@@ -176,9 +176,6 @@ public:
     int xCbDeDeplacement = 0;
     int yCbDeDeplacement = 0;
 
-    cout << "testX = " << testX << endl;
-    cout << "testY = " << testY << endl;
-
 
     xCbDeDeplacement = XObjet - testX;
     yCbDeDeplacement = YObjet - testY;
@@ -201,50 +198,19 @@ public:
       testY--;
     }
 
-    if(testX == XObjet && testY == YObjet){
-      cout << "---------" << endl;
-      cout << "compt = " << compt << endl;
-      cout << "---------" << endl;
-
+    if(testX == XObjet && testY == YObjet)
       return compt;
-    }
-    else{
+    else
       return ComptNbPAS(XObjet, YObjet, compt+1);
-    }
   }
 
 
-
-
-
-
-  int XcalculNbPas(int XObjet){
-    int xCbDeDeplacement = 0;
-    xCbDeDeplacement = XObjet - x;
-    return xCbDeDeplacement;
-  }
-
-  int YcalculNbPas(int YObjet){
-    int yCbDeDeplacement = 0;
-    yCbDeDeplacement = YObjet - y;
-    return yCbDeDeplacement;
-  }
-
-  void transformationTabNbCase(int tab[]){
-    for(int i = 0; tab[i]!=Vide; i+=2){
-      tab[i] = XcalculNbPas(tab[i]);
-      tab[i+1] = YcalculNbPas(tab[i+1]);
-    }
-  }
-
-  // La variable idObjet correspond à une variable de l'énumération ObjetMap
-  // La variable precision permet de savoir si on recherche un type particulier ou toute l'espece
-  // Par exemple si precision == 0, on recherchera que les loups mâles (par exemple)
-  // si precision == 1, on recherchera tout les loups (même les loups femelles et les loups BB)
-  void plus_proche(int idObjet, int precision) {
+  //Cette fonction permet de trouver soit un type d'Objet précis (Loup_Male, Herbe, ...) ou de trouver tous les Objets d'un même type (tous les loups, tous les moutons)
+  //Si précision == 1 (recherche tous les Objets de même types (par exemple tous les moutons))
+  //Si précision == 0 (recherche un Objet précis (Loup_Femelle, Mouton_BB))
+  void DLCplusProche(int ID, int precision){
     int tab[100];
     int tabCompt[100];
-
     for(int i = 0; i < 100; i++){
       tab[i] = Vide;
       tabCompt[i] = 200;
@@ -253,19 +219,28 @@ public:
     int MinY = 50;
     int compt = 0;
     int MinCompt = 100;
-    if(precision == 1){ // Si on recherche une famille d'objet en général (par exemple tous les Loups ou les Moutons)
-      if(idObjet < 3 || idObjet == M){ // Si Mouton en Général
+
+    if(precision == 1){
+      if(ID < 3 || ID == M){
+        cout << "OK" << endl;
         compt = stockageCoordonneTab(tab, Mouton_Femelle, 0);
         compt = stockageCoordonneTab(tab, Mouton_Male, compt);
         compt = stockageCoordonneTab(tab, Mouton_BB, compt);
-        //transformationTabNbCase(tab);
-        cout << "Recherche Mouton" << endl;
-        for(int i = 0; tab[i] != Vide; i++){
-          cout << tab[i];
-        }
-        cout << endl;
+      }
+      else if(ID < 6 || ID == L){
+        compt = stockageCoordonneTab(tab, Loup_Femelle, 0);
+        compt = stockageCoordonneTab(tab, Loup_Male, compt);
+        compt = stockageCoordonneTab(tab, Loup_BB, compt);
+      }
+      else if(ID == Herbe)
+        compt = stockageCoordonneTab(tab, Herbe, 0);
+      else
+        compt = stockageCoordonneTab(tab, Sel_Mineraux, 0);
+    }
+    else
+      compt = stockageCoordonneTab(tab, ID, 0);
 
-        int comptTest = 0;
+    int comptTest = 0;
         for(int i = 0; tab[i] != Vide; i+=2){
           testX = y;
           testY = x;
@@ -273,10 +248,9 @@ public:
           comptTest++;
         }
 
-        cout << "tableauCompt : ";
+        cout << "tabCompt : ";
         for(int i = 0; tabCompt[i] != 200; i++){
-          cout << tabCompt[i];
-          cout << " ";
+          cout << tab[i] << " ";
         }
         cout << endl;
 
@@ -292,70 +266,18 @@ public:
         MinX = tab[position*2];
         MinY = tab[position*2+1];
 
-        cout << "position : " << position << endl;
-        cout << "Min Compt = " << MinCompt << endl;
         cout << "X = " << MinX << endl;
         cout << "Y = " << MinY << endl;
-      }
-      else if(idObjet < 6 || idObjet == L){ // Si Loup en Général
-        compt = stockageCoordonneTab(tab, Loup_Femelle, 0);
-        compt = stockageCoordonneTab(tab, Loup_Male, compt);
-        compt = stockageCoordonneTab(tab, Loup_BB, compt);
-        transformationTabNbCase(tab);
-        for(int i = 0; tab[i] != Vide; i+=2){
-          if(tab[i] <= MinX){
-            if(tab[i+1] <= MinY){
-              MinX = tab[i];
-              MinY = tab[i+1];
-            }
-          }
-        }
-        cout << "X = " << MinX << endl;
-    cout << "Y = " << MinY << endl;
-      }
-      else if(idObjet == 7){ // Si Herbe
-        compt = stockageCoordonneTab(tab, Herbe, 0);
-        transformationTabNbCase(tab);
-        for(int i = 0; tab[i] != Vide; i+=2){
-          if(tab[i] <= MinX){
-            if(tab[i+1] <= MinY){
-              MinX = tab[i];
-              MinY = tab[i+1];
-            }
-          }
-        }
-        cout << "X = " << MinX << endl;
-    cout << "Y = " << MinY << endl;
-      }
-      else{ // Si Sel Minéraux
-        stockageCoordonneTab(tab, Sel_Mineraux, 0);
-        transformationTabNbCase(tab);
-        for(int i = 0; tab[i] != Vide; i+=2){
-          if(tab[i] <= MinX){
-            if(tab[i+1] <= MinY){
-              MinX = tab[i];
-              MinY = tab[i+1];
-            }
-          }
-        }
-        cout << "X = " << MinX << endl;
-    cout << "Y = " << MinY << endl;
-      }
-    }
-    else{ // Si on recherche un objet en particulier
-      stockageCoordonneTab(tab,idObjet, 0);
-      transformationTabNbCase(tab);
-      for(int i = 0; tab[i] != Vide; i+=2){
-          if(tab[i] <= MinX){
-            if(tab[i+1] <= MinY){
-              MinX = tab[i];
-              MinY = tab[i+1];
-            }
-          }
-        }
-        cout << "X = " << MinX << endl;
-    cout << "Y = " << MinY << endl;
-    }
+
+  }
+
+
+  // La variable idObjet correspond à une variable de l'énumération ObjetMap
+  // La variable precision permet de savoir si on recherche un type particulier ou toute l'espece
+  // Par exemple si precision == 0, on recherchera que les loups mâles (par exemple)
+  // si precision == 1, on recherchera tout les loups (même les loups femelles et les loups BB)
+  void plus_proche(int idObjet, int precision) {
+    DLCplusProche(idObjet, precision);
   }
 
 
