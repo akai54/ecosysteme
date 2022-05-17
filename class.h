@@ -40,19 +40,23 @@ class Pions {
 protected:
   char nom;
   int x = 0, y = 0;
+  int nbTourMaxSurLeTerrain; // Nb de tour qu'il est sur le terrain
 };
 
 class Animaux : public Pions {
 protected:
   int nbTourMaxSansManger;   // nb tour max sans manger
-  int nbTourMaxSurLeTerrain; // Nb de tour qu'il est sur le terrain
   int sexe;                  // 0 = mâle; 1 = femelle
   int comptJourSansManger = 0;
   int comptJour = 0;
-  int sexeIdPions = 0;
+  int sexeIdPions = 0; // Détermine L'identité de l'objet dans l'énumération Objet
 
   int testX = 0;
   int testY = 0;
+
+  int Xobj = 100; // Coordonnée X de l'objet le plus proche
+  int Yobj = 100; // Coordonnée Y de l'objet le plus proche
+
 
 public:
   Animaux() {
@@ -63,15 +67,7 @@ public:
 
   int sexeAnimaux() { return sexe; }
 
-  void jouer() {
-    if (comptJourSansManger == nbTourMaxSansManger ||
-        comptJour == nbTourMaxSurLeTerrain)
-      mortNaturel();
-
-    comptJour++;
-    comptJourSansManger++;
-    cout << comptJour << endl;
-  }
+  void virtual jouer() = 0;
 
   void position(int newX, int newY, char nom) {
     map.position(x, y, ' ');
@@ -90,59 +86,6 @@ public:
 
   void mort() { map.position(x, y, ' '); }
 
-  // int
-  // tabDeplacementPossibe[16]={x+1,y,x+1,y+1,x,y+1,x-1,y+1,x-1,y,x-1,y-1,x,y-1,x+1,y-1};
-  // // Faire indice+2 pour obtenir la direction voulue (que des multiples de
-  // 2)(droite puis sens des aiguilles d'une montre)
-
-  void Autour() {
-    if (x == 0) {
-      if (y == 0) {
-        int tabDirectionPossible[] = {x + 1, y, x + 1, y + 1, x, y + 1};
-        AutourCase(tabDirectionPossible, 6);
-      } else if (y == 7) {
-        int tabDirectionPossible[] = {x, y - 1, x + 1, y - 1, x + 1, y};
-        AutourCase(tabDirectionPossible, 6);
-      } else {
-        int tabDirectionPossible[] = {
-            x, y - 1, x + 1, y - 1, x + 1,
-            y, x + 1, y + 1, x,     y + 1}; // Si y entre 1 et 6
-        AutourCase(tabDirectionPossible, 10);
-      }
-    } else if (x == 7) {
-      if (y == 0) {
-        int tabDirectionPossible[] = {x, y + 1, x - 1, y + 1, x - 1, y};
-        AutourCase(tabDirectionPossible, 6);
-
-      } else if (y == 7) {
-        int tabDirectionPossible[] = {x - 1, y, x - 1, y - 1, x, y - 1};
-        AutourCase(tabDirectionPossible, 6);
-
-      } else {
-        int tabDirectionPossible[] = {
-            x, y + 1, x - 1, y + 1, x - 1,
-            y, x - 1, y - 1, x,     y - 1}; // Si y entre 1 et 6
-        AutourCase(tabDirectionPossible, 10);
-      }
-    } else {
-      if (y == 0) {
-        int tabDirectionPossible[] = {x + 1, y,     x + 1, y + 1, x,
-                                      y + 1, x - 1, y + 1, x - 1, y};
-        AutourCase(tabDirectionPossible, 10);
-      } else if (y == 7) {
-        int tabDirectionPossible[] = {x + 1, y,     x + 1, y - 1, x,
-                                      y - 1, x - 1, y - 1, x - 1, y};
-        AutourCase(tabDirectionPossible, 10);
-      } else {
-        int tabDirectionPossible[16] = {x + 1, y,     x + 1, y + 1, x,
-                                        y + 1, x - 1, y + 1, x - 1, y,
-                                        x - 1, y - 1, x,     y - 1, x + 1,
-                                        y - 1}; // Si le pions n'est pas proche
-                                                // d'une bordure
-        AutourCase(tabDirectionPossible, 16);
-      }
-    }
-  }
 
   //Fait également les diagonales
   void deplacementVersObjet(int XObjet, int YObjet) {
@@ -164,12 +107,6 @@ public:
 
     position(x + xCbDeDeplacement, y + yCbDeDeplacement, nom);
   }
-
-
-
-
-
-
 
 
  int ComptNbPAS(int XObjet, int YObjet, int compt) {
@@ -215,8 +152,6 @@ public:
       tab[i] = Vide;
       tabCompt[i] = 200;
     }
-    int MinX = 50;
-    int MinY = 50;
     int compt = 0;
     int MinCompt = 100;
 
@@ -263,12 +198,11 @@ public:
           }
         }
 
-        MinX = tab[position*2];
-        MinY = tab[position*2+1];
+        Xobj = tab[position*2];
+        Yobj = tab[position*2+1];
 
-        cout << "X = " << MinX << endl;
-        cout << "Y = " << MinY << endl;
-
+        cout << "X = " << Xobj << endl;
+        cout << "Y = " << Yobj << endl;
   }
 
 
@@ -283,23 +217,6 @@ public:
 
 };
 
-//Cette fonction marche ( :) )
-int stockageCoordonneTab(int tab[], int ID, int compt){
-  for(int i = 0; i < 7; i++){
-    for(int j = 0; j < 7; j++){
-      if(tableauPionsMap[i][j] == ID){
-        tab[compt] = j; //coordonnée X
-        tab[compt+1] = i; //coordonnée Y
-        compt+=2;
-      }
-    }
-  }
-  return compt;
-}
-
-
-
-
 
 class Loup : public Animaux {
 
@@ -308,13 +225,48 @@ public:
     nom = 'L';
     nbTourMaxSurLeTerrain = 60;
     nbTourMaxSansManger = 10;
-
+    sexeIdPions = sexe + 3;
   }
 
   ~Loup(){};
 
+  void jouer() {
+    if (comptJourSansManger == nbTourMaxSansManger ||
+        comptJour == nbTourMaxSurLeTerrain){
+      mortNaturel();
+    }
+
+    else{
+      if(comptJour >= nbTourMaxSurLeTerrain){
+        int rechercheId = 0;
+        if(sexeIdPions == 3)
+          rechercheId = 4;
+        else
+          rechercheId = 3;
+        plus_proche(rechercheId, 0);
+        deplacementVersObjet(Xobj, Yobj);
+      }
+
+      // Si il a faim
+      if(comptJourSansManger == nbTourMaxSansManger/2){
+        plus_proche(M, 1);
+        deplacementVersObjet(Xobj, Yobj);
+      }
+
+      comptJour++;
+      comptJourSansManger++;
+      cout << comptJour << endl;
+    }
+  }
+
+
+
+
   void attaquerMoutons();
 };
+
+
+
 
 class Mouton : public Animaux {
 
@@ -323,43 +275,62 @@ public:
     nom = 'M';
     nbTourMaxSurLeTerrain = 50;
     nbTourMaxSansManger = 5; // Meur qu'au 6eme jours
+    sexeIdPions = sexe;
   }
 
   ~Mouton(){};
 
+
+
+  void jouer() {
+    if (comptJourSansManger == nbTourMaxSansManger ||
+        comptJour == nbTourMaxSurLeTerrain){
+      mortNaturel();
+    }
+
+    else{
+      if(comptJour >= nbTourMaxSurLeTerrain){
+        int rechercheId = 0;
+        if(sexeIdPions == 0)
+          rechercheId = 1;
+        else
+          rechercheId = 0;
+        plus_proche(rechercheId, 0);
+        deplacementVersObjet(Xobj, Yobj);
+      }
+
+      // Si il a faim
+      if(comptJourSansManger == nbTourMaxSansManger/2){
+        plus_proche(M, 1);
+        deplacementVersObjet(Xobj, Yobj);
+      }
+
+      comptJour++;
+      comptJourSansManger++;
+      cout << comptJour << endl;
+    }
+  }
+
+
+
   void mangerHerbe();
 };
 
-// Permet de mettre toute les valeurs de
-inline void initialiserTabCaseAutour(int tab[]) {
-  for (int i = 0; i < 8; i++) {
-    tab[i] = Vide;
-  }
-}
 
-inline void afficherTabInt(int tab[]) {
-  cout << "tab [ ";
-  for (int i = 0; i < 8; i++) {
-    cout << tab[i];
-    if (i < 7)
-      cout << ", ";
-  }
-  cout << " ]" << endl;
-}
 
-inline void AutourCase(int tabDirection[], int taille) {
-  initialiserTabCaseAutour(tabcaseAutour);
-  int compt = 0;
-  int x = 0, y = 0;
-  for (int i = 0; i < taille; i += 2) {
-    x = tabDirection[i];
-    y = tabDirection[i + 1];
-    tabcaseAutour[compt] = tableauPionsMap[x][y];
-    compt++;
-  }
 
-  // afficherTabInt(tabcaseAutour);
-}
+class SelMineraux : public Pions{
+  private :
+  int nbTour = 0;
+
+  public :
+  SelMineraux(){};
+};
+
+
+
+
+
 
 inline bool estUneCaseVide(int x, int y) {
   if (tableauPionsMap[x][y] == Vide)
@@ -373,4 +344,18 @@ inline void trouverCaseVide(int &x, int &y) {
     y = rand() % 7;
     trouverCaseVide(x, y);
   }
+}
+
+//Cette fonction marche ( :) )
+int stockageCoordonneTab(int tab[], int ID, int compt){
+  for(int i = 0; i < 7; i++){
+    for(int j = 0; j < 7; j++){
+      if(tableauPionsMap[i][j] == ID){
+        tab[compt] = j; //coordonnée X
+        tab[compt+1] = i; //coordonnée Y
+        compt+=2;
+      }
+    }
+  }
+  return compt;
 }
