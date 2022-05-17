@@ -80,11 +80,50 @@ void Init() {
   }
 }
 
+
+void Jouer(){
+  vector<Loup>::iterator i;
+   for(i=tableauLoup.begin(); i!=tableauLoup.end(); i++){
+    i->plus_proche(M, 1);
+   }
+  map.affiche();
+}
+
+
 int main(void) {
   srand(time(NULL));
-
   Init();
+  Jouer();
+  /*
+  Loup loup;
+  loup.position(3,3,'L');
+  tableauPionsMap[3][3] = Loup_Male;
+  Mouton M1;
+  Mouton M2;
+  Mouton M3;
+  M1.position(1,4,'M');
+  tableauPionsMap[1][4] = Mouton_Male;
+  M2.position(5,4,'M');
+  tableauPionsMap[5][4] = Mouton_Male;
+  M3.position(2,6,'M');
+  tableauPionsMap[2][6] = Mouton_Femelle;
   map.affiche();
+
+  int tab[100];
+  for(int i = 0; i<100; i++)
+    tab[i]=Vide;
+
+  loup.plus_proche(Mouton_Male, 1);
+  */
+  //stockageCoordonneTab(tab, Mouton_Male);
+  //stockageCoordonneTab(tab, Mouton_Male);
+  //stockageCoordonneTab(tab, Mouton_BB);
+  /*
+  for(int i = 0; tab[i]!=Vide; i++){
+    cout << tab[i];
+  }
+  */
+  //loup.plus_proche(M, 1);
 
   /*
    vector<Loup>::iterator i;
