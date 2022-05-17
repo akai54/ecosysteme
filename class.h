@@ -11,7 +11,6 @@ using namespace std;
 void AutourCase(int tabDirection[], int taille);
 int stockageCoordonneTab(int tab[], int ID, int compt);
 
-
 // Variable Globale
 Map map;
 
@@ -144,7 +143,7 @@ public:
     }
   }
 
-  //Fait également les diagonales
+  // Fait également les diagonales
   void deplacementVersObjet(int XObjet, int YObjet) {
     int xCbDeDeplacement = 0;
     int yCbDeDeplacement = 0;
@@ -165,53 +164,44 @@ public:
     position(x + xCbDeDeplacement, y + yCbDeDeplacement, nom);
   }
 
-
-
-
-
-
-
-
- int ComptNbPAS(int XObjet, int YObjet, int compt) {
+  int ComptNbPAS(int XObjet, int YObjet, int compt) {
     int xCbDeDeplacement = 0;
     int yCbDeDeplacement = 0;
-
 
     xCbDeDeplacement = XObjet - testX;
     yCbDeDeplacement = YObjet - testY;
 
-    if (xCbDeDeplacement > 0){
-      //xCbDeDeplacement = 1;
+    if (xCbDeDeplacement > 0) {
+      // xCbDeDeplacement = 1;
       testX++;
-    }
-    else if (xCbDeDeplacement < 0){
-      //xCbDeDeplacement = -1;
+    } else if (xCbDeDeplacement < 0) {
+      // xCbDeDeplacement = -1;
       testX--;
     }
 
-    if (yCbDeDeplacement > 0){
-      //yCbDeDeplacement = 1;
+    if (yCbDeDeplacement > 0) {
+      // yCbDeDeplacement = 1;
       testY++;
-    }
-    else if (yCbDeDeplacement < 0){
-      //yCbDeDeplacement = -1;
+    } else if (yCbDeDeplacement < 0) {
+      // yCbDeDeplacement = -1;
       testY--;
     }
 
-    if(testX == XObjet && testY == YObjet)
+    if (testX == XObjet && testY == YObjet)
       return compt;
     else
-      return ComptNbPAS(XObjet, YObjet, compt+1);
+      return ComptNbPAS(XObjet, YObjet, compt + 1);
   }
 
-
-  //Cette fonction permet de trouver soit un type d'Objet précis (Loup_Male, Herbe, ...) ou de trouver tous les Objets d'un même type (tous les loups, tous les moutons)
-  //Si précision == 1 (recherche tous les Objets de même types (par exemple tous les moutons))
-  //Si précision == 0 (recherche un Objet précis (Loup_Femelle, Mouton_BB))
-  void DLCplusProche(int ID, int precision){
+  // Cette fonction permet de trouver soit un type d'Objet précis (Loup_Male,
+  // Herbe, ...) ou de trouver tous les Objets d'un même type (tous les loups,
+  // tous les moutons) Si précision == 1 (recherche tous les Objets de même
+  // types (par exemple tous les moutons)) Si précision == 0 (recherche un Objet
+  // précis (Loup_Femelle, Mouton_BB))
+  void DLCplusProche(int ID, int precision) {
     int tab[100];
     int tabCompt[100];
-    for(int i = 0; i < 100; i++){
+    for (int i = 0; i < 100; i++) {
       tab[i] = Vide;
       tabCompt[i] = 200;
     }
@@ -220,86 +210,76 @@ public:
     int compt = 0;
     int MinCompt = 100;
 
-    if(precision == 1){
-      if(ID < 3 || ID == M){
+    if (precision == 1) {
+      if (ID < 3 || ID == M) {
         cout << "OK" << endl;
         compt = stockageCoordonneTab(tab, Mouton_Femelle, 0);
         compt = stockageCoordonneTab(tab, Mouton_Male, compt);
         compt = stockageCoordonneTab(tab, Mouton_BB, compt);
-      }
-      else if(ID < 6 || ID == L){
+      } else if (ID < 6 || ID == L) {
         compt = stockageCoordonneTab(tab, Loup_Femelle, 0);
         compt = stockageCoordonneTab(tab, Loup_Male, compt);
         compt = stockageCoordonneTab(tab, Loup_BB, compt);
-      }
-      else if(ID == Herbe)
+      } else if (ID == Herbe)
         compt = stockageCoordonneTab(tab, Herbe, 0);
       else
         compt = stockageCoordonneTab(tab, Sel_Mineraux, 0);
-    }
-    else
+    } else
       compt = stockageCoordonneTab(tab, ID, 0);
 
     int comptTest = 0;
-        for(int i = 0; tab[i] != Vide; i+=2){
-          testX = y;
-          testY = x;
-          tabCompt[comptTest] = ComptNbPAS(tab[i], tab[i+1], 1);
-          comptTest++;
-        }
+    for (int i = 0; tab[i] != Vide; i += 2) {
+      testX = y;
+      testY = x;
+      tabCompt[comptTest] = ComptNbPAS(tab[i], tab[i + 1], 1);
+      comptTest++;
+    }
 
-        cout << "tabCompt : ";
-        for(int i = 0; tabCompt[i] != 200; i++){
-          cout << tab[i] << " ";
-        }
-        cout << endl;
+    cout << "tabCompt : ";
+    for (int i = 0; tabCompt[i] != 200; i++) {
+      cout << tab[i] << " ";
+    }
+    cout << endl;
 
-        MinCompt = tabCompt[0];
-        int position = 0;
-        for(int i = 0; tabCompt[i] != 200; i++){
-          if(tabCompt[i] < MinCompt){
-            MinCompt = tabCompt[i];
-            position = i;
-          }
-        }
+    MinCompt = tabCompt[0];
+    int position = 0;
+    for (int i = 0; tabCompt[i] != 200; i++) {
+      if (tabCompt[i] < MinCompt) {
+        MinCompt = tabCompt[i];
+        position = i;
+      }
+    }
 
-        MinX = tab[position*2];
-        MinY = tab[position*2+1];
+    MinX = tab[position * 2];
+    MinY = tab[position * 2 + 1];
 
-        cout << "X = " << MinX << endl;
-        cout << "Y = " << MinY << endl;
-
+    cout << "X = " << MinX << endl;
+    cout << "Y = " << MinY << endl;
   }
 
-
   // La variable idObjet correspond à une variable de l'énumération ObjetMap
-  // La variable precision permet de savoir si on recherche un type particulier ou toute l'espece
-  // Par exemple si precision == 0, on recherchera que les loups mâles (par exemple)
-  // si precision == 1, on recherchera tout les loups (même les loups femelles et les loups BB)
+  // La variable precision permet de savoir si on recherche un type particulier
+  // ou toute l'espece Par exemple si precision == 0, on recherchera que les
+  // loups mâles (par exemple) si precision == 1, on recherchera tout les loups
+  // (même les loups femelles et les loups BB)
   void plus_proche(int idObjet, int precision) {
     DLCplusProche(idObjet, precision);
   }
-
-
 };
 
-//Cette fonction marche ( :) )
-int stockageCoordonneTab(int tab[], int ID, int compt){
-  for(int i = 0; i < 7; i++){
-    for(int j = 0; j < 7; j++){
-      if(tableauPionsMap[i][j] == ID){
-        tab[compt] = j; //coordonnée X
-        tab[compt+1] = i; //coordonnée Y
-        compt+=2;
+// Cette fonction marche ( :) )
+inline int stockageCoordonneTab(int tab[], int ID, int compt) {
+  for (int i = 0; i < 7; i++) {
+    for (int j = 0; j < 7; j++) {
+      if (tableauPionsMap[i][j] == ID) {
+        tab[compt] = j;     // coordonnée X
+        tab[compt + 1] = i; // coordonnée Y
+        compt += 2;
       }
     }
   }
   return compt;
 }
-
-
-
-
 
 class Loup : public Animaux {
 
@@ -308,7 +288,6 @@ public:
     nom = 'L';
     nbTourMaxSurLeTerrain = 60;
     nbTourMaxSansManger = 10;
-
   }
 
   ~Loup(){};
