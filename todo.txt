@@ -1,3 +1,9 @@
+faire push_back lors d'une repoduction
+faire
+
+
+
+
 - Récupérer coordonnées des pions sur la map et les stocker dans un tableau.
     (par exemple faire un tableau de la map avec des 1 et des 0)
     (Si il y a un 1, )

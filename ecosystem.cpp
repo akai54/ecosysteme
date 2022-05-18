@@ -21,6 +21,8 @@ deplacement aléatoire puis deplacement intelligent
 // variables globales
 vector<Loup> tableauLoup;
 vector<Mouton> tableauMouton;
+vector<SelMineraux> tabSelMineraux;
+
 
 void Init() {
   int cbLoup = 0;
@@ -40,52 +42,150 @@ void Init() {
     }
   }
 
-  for (int i = 0; i < 7; i++) {
-    for (int j = 0; j < 7; j++) {
-      tableauPionsGenerale[i][j] = Vide;
-    }
-  }
-
-  int x, y;
+  int x = rand() % 7, y = rand() % 7;
   // Initialisation du nombre de loup dans tableau Loup
   // Le constructeur est appelé automatiquement
   for (int i = 0; i < cbLoup; i++) {
-    x = rand() % 7;
-    y = rand() % 7;
-    trouverCaseVide(x, y);
+    while(tableauPionsMap[x][y]!=Vide){
+      x = rand() % 7;
+      y = rand() % 7;
+    }
     Loup loup;
-    int sexePionsId =
-        loup.sexeAnimaux() + 3; // sexeAnimaux revoit 0 = mâle; 1 = femelle
-    tableauPionsMap[x][y] = sexePionsId;
-    tableauPionsGenerale[x][y] = L;
-    loup.position(x, y, 'L');
-    tableauPionsMap[x][y] = sexePionsId;
+    int sexePionsId = loup.sexeAnimaux() + 3; // sexeAnimaux revoit 0 = mâle; 1 = femelle
+    loup.position(y, x, 'L');
+    tableauPionsMap[y][x] = sexePionsId;
     tableauLoup.push_back(loup); // Mettre loup dans le vector tabLoup
   }
 
   // Initialisation du nombre de loup dans tableau Mouton
   // Le constructeur est appelé automatiquement
   for (int i = 0; i < cbMouton; i++) {
-    x = rand() % 7;
-    y = rand() % 7;
-    trouverCaseVide(x, y);
+    while(tableauPionsMap[x][y]!=Vide){
+      x = rand() % 7;
+      y = rand() % 7;
+    }
     Mouton mouton;
-    int sexePionsId =
-        mouton.sexeAnimaux(); // sexeAnimaux revoit 0 = mâle; 1 = femelle
-    tableauPionsMap[x][y] = sexePionsId;
-    tableauPionsGenerale[x][y] = M;
-    mouton.position(x, y, 'M');
-    tableauPionsMap[x][y] = sexePionsId;
+    int sexePionsId = mouton.sexeAnimaux(); // sexeAnimaux revoit 0 = mâle; 1 = femelle
+    mouton.position(y, x, 'M');
+    tableauPionsMap[y][x] = sexePionsId;
     tableauMouton.push_back(mouton); // Mettre mouton dans le vector tabMouton
   }
+
+
+  for(int i = 0; i < 3; i++){
+    while(!estUneCaseVide(x,y)){
+      x = rand() % 7;
+      y = rand() % 7;
+    }
+    map.position(x,y,'H');
+    tableauPionsMap[x][y] = Herbe;
+  }
+
+  map.affiche();
 }
 
 
 void Jouer(){
-  vector<Loup>::iterator i;
-   for(i=tableauLoup.begin(); i!=tableauLoup.end(); i++){
-    i->plus_proche(M, 1);
-   }
+  int comptTour = 0;
+  int comptNbLoup = tableauLoup.size();
+  int comptNbMouton = tableauMouton.size();
+
+  //int comptNbMouton = tableauMouton.size();
+  //&& comptNbMouton > 0
+  while(comptNbLoup > 0 && comptNbMouton > 0){
+    for(auto i = tableauLoup.begin(); i!=tableauLoup.end(); i++){
+      if(comptNbLoup <=0)
+        break;
+      i->jouer();
+      if(i->mortPossible()){
+        cout << "Mort"<< endl;
+        tableauLoup.erase(i);
+        comptNbLoup = tableauLoup.size();
+        //cout << "Nb Loup : "<< comptNbLoup << endl;
+      }
+      else if(i->BoolreproductionPossible()){
+        //cout << "Reproduction"<< endl;
+        int Xobj = i->getXObjet();
+        int Yobj = i->getYObjet();
+        Loup loup;
+        int sexePionsId = loup.sexeAnimaux() + 3; // sexeAnimaux revoit 0 = mâle; 1 = femelle
+        loup.position(Xobj, Yobj, 'L');
+        tableauPionsMap[Xobj][Yobj] = sexePionsId;
+        tableauLoup.push_back(loup);
+      }
+      else if(i->mangerPossible()){
+        //cout << "Manger let's go"<< endl;
+        int Xobj = i->getXObjet();
+        int Yobj = i->getYObjet();
+        for(auto j=tableauMouton.begin(); j!=tableauMouton.end(); j++){
+          if(j->getY() == Xobj && i->getX() == Yobj){
+            tableauMouton.erase(j);
+          }
+        }
+      }
+      else{
+        //cout << "Test"<< endl;
+        continue;
+      }
+    }//Fin boucle For
+
+
+    for(auto j = tableauMouton.begin(); j != tableauMouton.end(); j++){
+          if(comptNbMouton <=0)
+            break;
+          j->jouer();
+          if(j->mortPossible()){
+            //cout << "Mort"<< endl;
+            tableauMouton.erase(j);
+            comptNbLoup = tableauLoup.size();
+            //cout << "Nb Loup : "<< comptNbLoup << endl;
+          }
+          else if(j->BoolreproductionPossible()){
+            //cout << "Reproduction"<< endl;
+            int Xobj = j->getXObjet();
+            int Yobj = j->getYObjet();
+            Mouton m;
+            int sexePionsId = m.sexeAnimaux(); // sexeAnimaux revoit 0 = mâle; 1 = femelle
+            m.position(Xobj, Yobj, 'M');
+            tableauPionsMap[Xobj][Yobj] = sexePionsId;
+            tableauMouton.push_back(m);
+          }
+          else{
+            //cout << "Test"<< endl;
+            continue;
+          }
+
+    }
+
+
+    map.affiche();
+    comptTour++;
+    cout << "nb Tour : " << comptTour << endl;
+    comptNbLoup = tableauLoup.size();
+    comptNbMouton = tableauMouton.size();
+
+  }// Fin While
+
+  cout << "Fin" << endl;
+
+}
+
+
+void test(){
+  int x = 0;
+  int y = 0;
+  int Xobj = 0, Yobj = 0;
+  for(auto i = tableauLoup.begin(); i != tableauLoup.end(); i++){
+    i->plus_proche(M,1);
+    x = i->getX();
+    y = i->getY();
+    cout << "x : " << x << ", y  : " << y << endl;
+    Xobj = i->getXObjet();
+    Yobj = i->getYObjet();
+    if(x!=Xobj && y!=Yobj){
+      i->deplacementVersObjet(Xobj, Yobj);
+    }
+  }
   map.affiche();
 }
 
@@ -94,46 +194,6 @@ int main(void) {
   srand(time(NULL));
   Init();
   Jouer();
-  /*
-  Loup loup;
-  loup.position(3,3,'L');
-  tableauPionsMap[3][3] = Loup_Male;
-  Mouton M1;
-  Mouton M2;
-  Mouton M3;
-  M1.position(1,4,'M');
-  tableauPionsMap[1][4] = Mouton_Male;
-  M2.position(5,4,'M');
-  tableauPionsMap[5][4] = Mouton_Male;
-  M3.position(2,6,'M');
-  tableauPionsMap[2][6] = Mouton_Femelle;
-  map.affiche();
-
-  int tab[100];
-  for(int i = 0; i<100; i++)
-    tab[i]=Vide;
-
-  loup.plus_proche(Mouton_Male, 1);
-  */
-  //stockageCoordonneTab(tab, Mouton_Male);
-  //stockageCoordonneTab(tab, Mouton_Male);
-  //stockageCoordonneTab(tab, Mouton_BB);
-  /*
-  for(int i = 0; tab[i]!=Vide; i++){
-    cout << tab[i];
-  }
-  */
-  //loup.plus_proche(M, 1);
-
-  /*
-   vector<Loup>::iterator i;
-   for(i=tab.begin(); i!=tab.end(); i++){
-    i->deplacement(rand()%7,rand()%7,'L');
-   }
-  */
-  // map.affiche();
-
-  // delete tabLoup;
-
+  //test();
   return 0;
 }
