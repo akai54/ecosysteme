@@ -119,7 +119,7 @@ public:
   void mort() {
     map.position(x, y, ' ');
     tableauPionsMap[x][y] = Vide;
-}
+  }
 
 
   //Fait également les diagonales
@@ -146,7 +146,7 @@ public:
 
 //Fonction récursive
 //La fonction CompteNbPas permet de calculer le nombre de case qui sépare l'animal de l'objet recherché
- int ComptNbPAS(int XObjet, int YObjet, int compt) {
+int ComptNbPAS(int XObjet, int YObjet, int compt) {
     int xCbDeDeplacement = 0;
     int yCbDeDeplacement = 0;
 

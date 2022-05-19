@@ -92,7 +92,7 @@ void Jouer(){
 
   //int comptNbMouton = tableauMouton.size();
   //&& comptNbMouton > 0
-  while(comptNbLoup > 0 && comptNbMouton > 0){
+  while(comptNbLoup < 0 && comptNbMouton < 0){
     for(auto i = tableauLoup.begin(); i!=tableauLoup.end(); i++){
       if(comptNbLoup <=0)
         break;
@@ -157,7 +157,6 @@ void Jouer(){
 
     }
 
-
     map.affiche();
     comptTour++;
     cout << "nb Tour : " << comptTour << endl;
@@ -166,12 +165,56 @@ void Jouer(){
 
   }// Fin While
 
+  int test = rand()%20;
+  while(comptNbLoup > 0 && comptNbMouton > 0){
+    comptNbLoup = tableauLoup.size();
+    comptNbMouton = tableauMouton.size();
+    for(auto i = tableauLoup.begin(); i != tableauLoup.end(); i++){
+      test = rand()%20;
+      if(test == 1){
+        tableauLoup.erase(i);
+        //map.position(x,y,' ');
+        break;
+      }
+      else{
+        i->plus_proche(M,1);
+        int xob = i->getXObjet();
+        int yob = i->getYObjet();
+        int x = i->getX();
+        int y = i->getY();
+        i->deplacementVersObjet(xob - x, yob - y);
+      }
+
+    }
+    for(auto j = tableauMouton.begin(); j != tableauMouton.end(); j++){
+      test = rand()%20;
+      if(test == 1){
+        tableauMouton.erase(j);
+        //map.position(y,x,' ');
+        break;
+      }
+      else{
+        j->plus_proche(Herbe,0);
+        int xob = j->getXObjet();
+        int yob = j->getYObjet();
+        int x = j->getX();
+        int y = j->getY();
+        j->deplacementVersObjet(xob - x, yob - y);
+      }
+    }
+    map.affiche();
+    comptTour++;
+    cout << "nb Tour : " << comptTour << endl;
+  }
+
+
   cout << "Fin" << endl;
 
 }
 
 
 void test(){
+  int comptTour = 0;
   int x = 0;
   int y = 0;
   int Xobj = 0, Yobj = 0;
@@ -187,6 +230,7 @@ void test(){
     }
   }
   map.affiche();
+
 }
 
 
